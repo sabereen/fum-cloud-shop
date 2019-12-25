@@ -5,6 +5,7 @@ import config from "../config"
 
 mongoose.connect(config.mongo.uri, {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
 }, (err) => {
     if (err) return console.log('database connection error!')
     console.log('database connected')
