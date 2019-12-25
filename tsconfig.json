@@ -1,0 +1,28 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        // "baseUrl": "./src",
+        "moduleResolution": "node",
+        "watch": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "target": "es2019",
+        "module": "commonjs",
+        "removeComments": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "lib": [
+            "es2019",
+            "dom"
+        ]
+        // "paths": {
+        //     "*": ["types/*"]
+        // }
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
