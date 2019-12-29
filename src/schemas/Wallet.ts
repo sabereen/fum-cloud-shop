@@ -2,11 +2,11 @@ import { Typegoose, prop, Ref } from "typegoose";
 import Profile from "./Profile";
 
 export class Wallet extends Typegoose {
-    @prop()
+    @prop({required:true})
     value: number
 
     @prop({ ref: Profile })
-    profile: Ref<Profile>
+    profileID: Ref<Profile>
 }
 
 export default Wallet

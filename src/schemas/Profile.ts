@@ -1,8 +1,13 @@
 import { Typegoose, prop, Ref } from "typegoose";
 
 export class Profile extends Typegoose {
-    @prop()
+    @prop({
+        required:true,
+        index:true,
+        unique:true,
+        lowercase:true})
     email: string
+    
 
     @prop()
     name: string
