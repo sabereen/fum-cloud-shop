@@ -1,0 +1,13 @@
+version: '2.1'
+
+services:
+  fum-cloud-shop:
+    image: fum-cloud-shop
+    build: .
+    environment:
+      NODE_ENV: development
+    ports:
+      - 6672:6672
+      - 9229:9229
+    ## set your startup file here
+    command: node --inspect index.js

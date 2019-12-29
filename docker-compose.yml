@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  fum-cloud-shop:
+    image: fum-cloud-shop
+    build: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 6672:6672
