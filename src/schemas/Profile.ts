@@ -5,6 +5,7 @@ let newProfil:any
 let callba:any
 let emai:any
 let profile:any
+let upPro:any
 export class Profile extends Typegoose {
     constructor(){
         super();
@@ -19,8 +20,13 @@ export class Profile extends Typegoose {
      getUserByEmail = (email) => {
          emai = email
          get()
-         console.log(profile)
+         //console.log(profile)
         return profile
+    };
+    updateProfile  (userUpdate, callback)  {
+        upPro = userUpdate;
+        callba = callback
+        update()
     };
     @prop({
         required:true,
@@ -68,5 +74,13 @@ export function get (){
        
         profile =  ProfileModel.findOne(query);
         
+      })();
+}
+export function update (){
+    (async () => {
+        //const u = new newProfile({ name: 'JohnDoe' });
+        await ProfileModel.updateOne({email:upPro.email},upPro,callba);
+        //const user = await ProfileModel.findOne();
+        //console.log(user); // { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
       })();
 }

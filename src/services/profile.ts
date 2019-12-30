@@ -113,8 +113,7 @@ router.post('/profile', (req, res, next) => {
 router.get('/profile', (req, res, next) => {
     const auth = req.get("authorization")
     newProfile = new Profile()
-    //console.log(auth[1])
-    //const token = JSON.stringify(auth[1]); // Extract the token from Bearer
+    
     const options = {
         host: "127.0.0.1",
         port: 2000,
@@ -171,5 +170,74 @@ router.get('/profile', (req, res, next) => {
         reques.end()
     
 });
+router.put('/profile', (req, res, next) => {
+    
 
+    const {
+        name,
+        phoneNo,
+        nationalCode,
+        address,
+        postalCode
+    } = req.body;
+    newProfile = new Profile()
+    const auth = req.get("authorization") 
+    const options = {
+        host: "127.0.0.1",
+        port: 2000,
+        path: '/auth/v1/user/role',
+        method: 'GET',
+
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization':auth
+        }
+
+    };
+        const reques = http.request(options, (repons) => {
+
+            repons.setEncoding('utf8');
+            repons.on('data', (d) => {
+    
+                if (repons.statusCode == 200) {
+                   
+    
+                    newProfile.getUserByEmail(JSON.parse(d).email).then((user) => { 
+                        if (!user) {
+                            return res.status(404).json("Email Not Found");
+                        }
+                        
+                        const userUpdate = {
+                            name:name,
+                            email:JSON.parse(d).email,
+                            phoneNo:phoneNo,
+                            nationalCode:nationalCode,
+                            address:address,
+                           postalCode:postalCode
+                        }
+                
+                        newProfile.updateProfile( userUpdate, () => {
+                            return res.status(200).json(userUpdate);
+                        });
+                        
+                    }).catch((err) => {
+                        return next(err);
+                    });
+                    
+                   
+                }
+                else {
+                    return res.json(JSON.parse(d).message)
+                }
+            })
+        })
+    
+        reques.on('error', (error) => {
+            return error.json("error in server")
+        })
+    
+        
+        reques.end()
+    
+});
 module.exports = router;
