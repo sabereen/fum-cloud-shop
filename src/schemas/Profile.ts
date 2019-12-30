@@ -1,6 +1,20 @@
 import { Typegoose, prop, Ref } from "typegoose";
-
+import * as mongoose from 'mongoose';
+mongoose.connect('mongodb://localhost:27017/profile');
+let newProfil:any
+let callba:any
 export class Profile extends Typegoose {
+    constructor(){
+        super();
+    }
+    createProfile (newProfile, callback)  {
+        // console.log("lll")
+        newProfil=newProfile
+        callba=callback
+        save()
+       //createProfile(newProfile,callback)
+     };
+
     @prop({
         required:true,
         index:true,
@@ -8,7 +22,6 @@ export class Profile extends Typegoose {
         lowercase:true})
     email: string
     
-
     @prop()
     name: string
 
@@ -19,12 +32,23 @@ export class Profile extends Typegoose {
     nationalCode: string
 
     @prop()
-    address: number
+    address: string
 
     @prop()
     postalCode: string
+
+   
 }
 
 export default Profile
 
-export const ProfileModel = new Profile().getModelForClass(Profile)
+export const ProfileModel = new Profile().getModelForClass(Profile);
+
+export function save (){
+    (async () => {
+        //const u = new newProfile({ name: 'JohnDoe' });
+        await ProfileModel.create(newProfil);
+        //const user = await ProfileModel.findOne();
+        //console.log(user); // { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
+      })();
+}
