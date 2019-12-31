@@ -6,6 +6,7 @@ let callba:any
 let emai:any
 let profile:any
 let upPro:any
+let idpro:any
 export class Profile extends Typegoose {
     constructor(){
         super();
@@ -15,6 +16,7 @@ export class Profile extends Typegoose {
         newProfil=newProfile
         callba=callback
         save()
+        return idpro
        //createProfile(newProfile,callback)
      };
      getUserByEmail = (email) => {
@@ -60,7 +62,8 @@ export const ProfileModel = new Profile().getModelForClass(Profile);
 export function save (){
     (async () => {
         //const u = new newProfile({ name: 'JohnDoe' });
-        await ProfileModel.create(newProfil);
+        idpro =  ProfileModel.create(newProfil);
+       //console.log(idpro)
         //const user = await ProfileModel.findOne();
         //console.log(user); // { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
       })();

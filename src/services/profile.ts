@@ -1,4 +1,5 @@
 import Profile, { ProfileModel } from "../schemas/Profile";
+import Wallet from "../schemas/Wallet";
 
 const express = require('express');
 const router = express.Router();
@@ -14,6 +15,7 @@ router.get('/heartbeat', function (req, res, next) {
     return res.status(200).json("Account Management is up and runing");
 });
 let newProfile: Profile
+let newWallet:Wallet
 router.post('/profile', (req, res, next) => {
 
     const {
@@ -26,7 +28,7 @@ router.post('/profile', (req, res, next) => {
         postalCode
     } = req.body;
     newProfile = new Profile()
-
+    newWallet = new Wallet()
     // console.log(newProfile)
     const data = JSON.stringify({
         email: email.toString(),
@@ -64,8 +66,23 @@ router.post('/profile', (req, res, next) => {
 
                         return next(err);
                     }
+                   
                     //  return res.status(rm.registerSuccessful.code).json(rm.registerSuccessful.msg);
-                });
+                }).then((id)=>{
+                    //console.log(id)
+                    newWallet.profileID = id._id
+                    newWallet.value = 0
+                    newWallet.createWallet(newWallet, (err, usr) => {
+                        if (err || !usr) {
+    
+                            return next(err);
+                        }
+                       
+                        //  return res.status(rm.registerSuccessful.code).json(rm.registerSuccessful.msg);
+                    })
+                }).catch((err) => {
+                    return next(err);
+                });;
                 
                 return login(data)
             }
