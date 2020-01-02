@@ -18,8 +18,6 @@ require('class-transformer')['classToPlain'] = function (obj: object)  {
 //     }
 // }
 
-const bodyParser = require('body-parser')
-
 const appOptions: RoutingControllersOptions = {
     controllers: [
     ],
@@ -69,20 +67,19 @@ const appOptions: RoutingControllersOptions = {
     }
 }
 
-const account: express.Application = createExpressServer(appOptions)
-const profile = require('./services/profile');
+const api: express.Application = createExpressServer(appOptions)
 const app = express()
-app.use(bodyParser.json())
-app.use('/account', (req, res, next) => {
+
+app.use('/api', (req, res, next) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
     next()
 })
-//app.use('/account', account)
-app.use('/account', profile);
+app.use('/api', api)
+
 app.use(express.static(config.clientPath))
 
 app.use((req, res, next) => {
-   res.status(404).sendFile(config.clientPath + '/index.html')
+    res.status(404).sendFile(config.clientPath + '/index.html')
 })
 
 app.listen(config.port, () => {
