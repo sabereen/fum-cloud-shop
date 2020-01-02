@@ -1,6 +1,7 @@
 import { RoutingControllersOptions, createExpressServer, HttpError, Action } from 'routing-controllers'
 import config from './config';
 import * as express from 'express';
+import { HeartBeatController } from './controllers/HeartBeat'
 
 import './services/database'
 
@@ -20,6 +21,7 @@ require('class-transformer')['classToPlain'] = function (obj: object)  {
 
 const appOptions: RoutingControllersOptions = {
     controllers: [
+        HeartBeatController
     ],
     defaults: {
         paramOptions: {
