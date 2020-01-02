@@ -3,7 +3,7 @@
     "compilerOptions": {
         // "baseUrl": "./src",
         "moduleResolution": "node",
-        "watch": true,
+        // "watch": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "target": "es2019",

@@ -1,10 +1,46 @@
 version: '2.1'
 
 services:
-  fum-cloud-shop:
-    image: fum-cloud-shop
-    build: .
+  # fum-cloud-shop:
+  #   image: fum-cloud-shop
+  #   build: .
+  #   environment:
+  #     NODE_ENV: production
+  #   ports:
+  #     - 6672:6672
+
+  fum-cloud-shop-dev:
+    image: node:13-alpine
+    container_name: nodejs
+    working_dir: /home/app
+    command: npm run start-dev
     environment:
-      NODE_ENV: production
+      MONGO_URI: mongodb://root:cloud@mongo/fum_cloud_shop?authSource=admin
+    volumes:
+      - .:/home/app
     ports:
       - 6672:6672
+
+  mongo:
+    image: mongo:4.2.2-bionic
+    container_name: mongo
+    restart: always
+    # ports:
+    #     - 27017:27017
+    volumes:
+      - mongo:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: cloud
+
+  auth:
+    image: sayid/auth
+    container_name: auth
+    # ports:
+    #   - 2000:2000
+    environment:
+      DB: mongodb://root:cloud@mongo/auth?authSource=admin
+
+volumes:
+  mongo:
+    driver: local
