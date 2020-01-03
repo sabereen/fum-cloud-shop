@@ -4,6 +4,7 @@ import * as express from 'express';
 import { HeartBeatController } from './controllers/HeartBeat'
 
 import './services/database'
+import { ProfileController } from './controllers/Profile';
 
 // disable classToPlain class-transformer
 require('class-transformer')['classToPlain'] = function (obj: object)  {
@@ -21,7 +22,8 @@ require('class-transformer')['classToPlain'] = function (obj: object)  {
 
 const appOptions: RoutingControllersOptions = {
     controllers: [
-        HeartBeatController
+        HeartBeatController,
+        ProfileController
     ],
     defaults: {
         paramOptions: {
@@ -69,14 +71,14 @@ const appOptions: RoutingControllersOptions = {
     }
 }
 
-const api: express.Application = createExpressServer(appOptions)
+const account: express.Application = createExpressServer(appOptions)
 const app = express()
 
-app.use('/api', (req, res, next) => {
+app.use('/account', (req, res, next) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
     next()
 })
-app.use('/api', api)
+app.use('/account', account)
 
 app.use(express.static(config.clientPath))
 

@@ -1,8 +1,7 @@
-FROM node:latest
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-COPY package.json /usr/src/app/
+FROM node:alpine
+WORKDIR /usr/src/accountman
+COPY package*.json ./
 RUN npm install & npm run build
-COPY . /usr/src/app
+COPY ./dist .
 EXPOSE 6672
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
