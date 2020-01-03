@@ -13,7 +13,7 @@ export async function register(data) {
             }
 
         }, (error, response, body) => {
-            console.log(body)
+            //console.log(body)
             if (error) reject(error);
             if (response.statusCode != 201) {
                 resolve({ statusCode: response.statusCode, message: body.message });

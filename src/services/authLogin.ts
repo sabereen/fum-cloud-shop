@@ -13,7 +13,7 @@ export async function login(data) {
             }
             
           }, (error, response, body) => {
-              console.log(body)
+              //console.log(body)
             if (error) reject(error);
             if (response.statusCode != 200) {
                 resolve({statusCode:response.statusCode,message:body.message});
