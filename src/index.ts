@@ -6,6 +6,7 @@ import { HeartBeatController } from './controllers/HeartBeat'
 import './services/database'
 import { ProfileController } from './controllers/Profile';
 import { WalletController } from './controllers/Wallet';
+import { PayController } from './controllers/pay';
 
 // disable classToPlain class-transformer
 require('class-transformer')['classToPlain'] = function (obj: object)  {
@@ -25,7 +26,8 @@ const appOptions: RoutingControllersOptions = {
     controllers: [
         HeartBeatController,
         ProfileController,
-        WalletController
+        WalletController,
+        PayController
     ],
     defaults: {
         paramOptions: {
