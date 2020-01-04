@@ -5,7 +5,7 @@ export default {
         uri: process.env['MONGO_URI'] || 'mongodb://localhost:27017/',
     },
     auth:{
-        uri: process.env['AUTH_URI'] || '127.0.0.1'
+        uri: process.env['AUTH_URI'] || 'http://127.0.0.1:2000/authentiq/v1'
     },
     port: process.env['PORT'] || 6672,
     apiRoot: process.env['API_ROOT'] || 'http://127.0.0.1:6672/account',

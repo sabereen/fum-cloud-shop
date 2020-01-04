@@ -6,7 +6,7 @@ import { register } from "../services/authRegister";
 import { request } from "http";
 import { ErrorController } from "./ErrorController";
 import { login } from "../services/authLogin";
-import { getRole } from "../services/authGetRole";
+import { validate } from "../services/authValidate";
 import Transaction, { TransactionModel } from "../schemas/Transaction";
 import { pay, checkPayment } from "../services/payment";
 const http = require("http");
@@ -26,7 +26,7 @@ export class PayController {
 
 
         try {
-            const responce = await getRole(token)
+            const responce = await validate(token)
             this.statusCode = responce['statusCode']
             // let profile = new Profile()
             if (this.statusCode == 200) {

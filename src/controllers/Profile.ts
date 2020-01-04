@@ -6,7 +6,7 @@ import { register } from "../services/authRegister";
 import { request } from "http";
 import { ErrorController } from "./ErrorController";
 import { login } from "../services/authLogin";
-import { getRole } from "../services/authGetRole";
+import { validate } from "../services/authValidate";
 const http = require("http");
 @JsonController('/profile')
 export class ProfileController {
@@ -50,9 +50,11 @@ export class ProfileController {
                     newWallet.value = 0
                     await WalletModel.create(newWallet);
                 })();
+                
                 try {
-                    const Token = await login(data)
-                    return Token
+                    //const Token = await login(data)
+                    //return Token
+                    return {token:responce['token']}
                 } catch (error) {
                     console.error('ERROR:');
                     console.error(error);
@@ -72,7 +74,7 @@ export class ProfileController {
     async get(@HeaderParam("authorization") token: string) {
         try {
             //console.log(token)
-            const responce = await getRole(token)
+            const responce = await validate(token)
             this.statusCode = responce['statusCode']
             //console.log(responce)
             let profile = new Profile()
@@ -106,7 +108,7 @@ export class ProfileController {
             } = upProfile
             //let profile = new Profile()
             //console.log(upProfile,token)
-            const responce = await getRole(token)
+            const responce = await validate(token)
             //console.log(responce)
             this.statusCode = responce['statusCode']
             //console.log(responce)

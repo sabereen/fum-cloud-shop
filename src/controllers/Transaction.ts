@@ -1,7 +1,7 @@
 import { JsonController, Get, Param, Post, Put, Authorized, Body, Res, OnUndefined, HttpError, HeaderParam } from "routing-controllers";
 import Profile, { ProfileModel } from "../schemas/Profile";
 import { ErrorController } from "./ErrorController";
-import { getRole } from "../services/authGetRole";
+import { validate } from "../services/authValidate";
 import { TransactionModel } from "../schemas/Transaction";
 const http = require("http");
 @JsonController('/transaction')
@@ -13,7 +13,7 @@ export class TransactionController {
     @OnUndefined(this.error)
     async get(@HeaderParam("authorization") token: string) {
         try {
-            const responce = await getRole(token)
+            const responce = await validate(token)
             this.statusCode = responce['statusCode']
             let profile = new Profile()
             if (this.statusCode == 200) {

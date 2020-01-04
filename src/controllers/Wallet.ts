@@ -5,8 +5,7 @@ import config from "../config";
 import { register } from "../services/authRegister";
 import { request } from "http";
 import { ErrorController } from "./ErrorController";
-import { login } from "../services/authLogin";
-import { getRole } from "../services/authGetRole";
+import { validate } from "../services/authValidate";
 const http = require("http");
 @JsonController('/wallet')
 export class WalletController {
@@ -17,7 +16,7 @@ export class WalletController {
     @OnUndefined(this.error)
     async get(@HeaderParam("authorization") token: string) {
         try {
-            const responce = await getRole(token)
+            const responce = await validate(token)
             this.statusCode = responce['statusCode']
             let profile = new Profile()
             if (this.statusCode == 200) {

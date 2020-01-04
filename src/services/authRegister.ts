@@ -7,7 +7,7 @@ export async function register(data) {
     return new Promise((resolve, reject) => {
         request({
             method: 'post',
-            uri: 'http://' + config.auth.uri + ':2000' + '/auth/v1/user/register',
+            uri:  config.auth.uri+ '/user/register',
             json: {
                 email: JSON.parse(data).email, password: JSON.parse(data).password
             }
@@ -18,7 +18,7 @@ export async function register(data) {
             if (response.statusCode != 201) {
                 resolve({ statusCode: response.statusCode, message: body.message });
             }
-            resolve({ statusCode: response.statusCode, message: body.message });
+            resolve({ statusCode: response.statusCode, message: body.message, token:body.token });
         });
     });
 
