@@ -1,4 +1,4 @@
-import { JsonController, Get,  Post,  Body, Res, OnUndefined, HeaderParam, QueryParams } from "routing-controllers";
+import { JsonController, Get,  Post,  Body, Res, OnUndefined, HeaderParam, QueryParams, Authorized, UnauthorizedError, BodyParam } from "routing-controllers";
 import Profile, { ProfileModel } from "../schemas/Profile";
 import { ErrorController } from "./ErrorController";
 import { validate } from "../services/authValidate";
@@ -19,10 +19,14 @@ class caQueryParams {
 export class PayController {
     statusCode: any
     error: ErrorController
+    @Authorized()
     @Post('')
     @OnUndefined(this.error)
-    async post(@Body() order: any, @HeaderParam("authorization") token: string, @Res() response:express.Response) {
+    async post(@BodyParam('orderID',{required:true}) order: any, @HeaderParam("authorization") token: string, @Res() response:express.Response) {
         //console.log(profile)
+        if(!token){
+            throw new UnauthorizedError('need authorized')
+        }
         let newTransaction: Transaction
         const {
             orderID
@@ -77,6 +81,11 @@ export class PayController {
                     console.error('ERROR:');
                     console.error(error);
                 }
+            }
+            else {
+                this.error = new ErrorController(this.statusCode, responce['message'])
+                response.status(this.statusCode)
+                return { message: responce['message'] }
             }
         } catch (error) {
             console.error('ERROR:');

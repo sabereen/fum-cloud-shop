@@ -1,4 +1,4 @@
-import { JsonController, Get, Param, Post, Put, Authorized, Body, Res, OnUndefined, HttpError, HeaderParam } from "routing-controllers";
+import { JsonController, Get, Param, Post, Put, Authorized, Body, Res, OnUndefined, HttpError, HeaderParam, BadRequestError, UnauthorizedError } from "routing-controllers";
 import Profile, { ProfileModel } from "../schemas/Profile";
 import Wallet, { WalletModel } from "../schemas/Wallet";
 import config from "../config";
@@ -19,6 +19,12 @@ export class ProfileController {
         //console.log(profile)
         let newProfile: Profile
         let newWallet: Wallet
+        if(!profile.email && !profile.password){
+             throw new BadRequestError('need email and password')
+        }
+        if(!profile.email || !profile.password){
+             throw new BadRequestError('need email and password')
+        }
         const {
             email,
             password,
@@ -72,11 +78,15 @@ export class ProfileController {
             console.error(error);
         }
     }
+    @Authorized()
     @Get('')
     @OnUndefined(this.error)
     async get(@HeaderParam("authorization") token: string, @Res() response:express.Response) {
         try {
             //console.log(token)
+            if(!token){
+                throw new UnauthorizedError('need authorized')
+            }
             const responce = await validate(token)
             this.statusCode = responce['statusCode']
             //console.log(responce)
@@ -98,10 +108,14 @@ export class ProfileController {
             console.error(error);
         }
     }
+    @Authorized()
     @Put('')
     @OnUndefined(this.error)
-    async put(@Body() upProfile: any, @HeaderParam("authorization") token: string, @Res() response:express.Response) {
+    async put(@Body({required:true}) upProfile: any, @HeaderParam("authorization") token: string, @Res() response:express.Response) {
         //console.log(token)
+        if(!token){
+            throw new UnauthorizedError('need authorized')
+        }
         try {
 
             const {

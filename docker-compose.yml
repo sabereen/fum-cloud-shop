@@ -44,11 +44,11 @@
 # volumes:
 #   mongo:
 #     driver: local
-version: "2.1"
+version: "2.0"
 
 services:
-  fum-cloud-shop:
-    image: fum-cloud-shop
+  accountma:
+    image: fumcloudshop/accountma:latest
     build: .
     environment:
       NODE_ENV: production
@@ -57,16 +57,44 @@ services:
     networks:
       maivn:
         aliases:
-          - fum-cloud-shop
+          - accountma
     # depends_on:
     #    - mongo
     #   - auth
     # links:
     #    - mongo
     #   - auth
-
+    depends_on:
+      - db
+    restart: unless-stopped
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost/auth/v1/heartbeat"]
+    #   interval: 20s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 1m
+  db:
+    image: mvertes/alpine-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: accountma
+      MONGO_INITDB_ROOT_PASSWORD: accountmanager
+    logging:
+      driver: 'none'
+    restart: unless-stopped
+    # healthcheck:
+    #   test: "echo 'db.stats().ok' | mongo localhost:27017/accountma --quiet"
+    #   interval: 5s
+    #   timeout: 10s
+    #   retries: 10
+    #   start_period: 15s
+    volumes:
+      - db-data:/data/db
+    networks: 
+      maivn:
+        aliases:
+          - db
   auth:
-    image: sayid/auth
+    image: sayid/authentiq
     ports:
       - 2000:2000
     networks:
@@ -74,19 +102,18 @@ services:
         aliases:
           - auth
 
-  mongo:
-    image: mongo
-    volumes:
-      - ./data:/data/db
-    ports:
-      - "27017:27017"
-    networks:
-      maivn:
-        aliases:
-          - mongo
+  # mongo:
+  #   image: mongo
+  #   volumes:
+  #     - ./data:/data/db
+  #   ports:
+  #     - "27017:27017"
+  #   networks:
+  #     maivn:
+  #       aliases:
+  #         - db
 
 networks:
   maivn: 
 volumes:
-  mongo:
-    driver: local
+  db-data:

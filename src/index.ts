@@ -52,7 +52,39 @@ const appOptions: RoutingControllersOptions = {
         // }
     },
     async authorizationChecker(action: Action, roles: string[]) {
-        return true
+        // for (let index = 0; index < config.AccountList.length; index++) {
+        //     const {
+        //         method,
+        //         url
+        //     } = config.AccountList[index];
+            
+        //     if (method === .method && url === req.path) {
+        //         if (!req.headers.authorization) {
+        //             return res.status(rm.noCredentials.code).json(rm.noCredentials.msg);
+        //         } else {
+        //             const token = req.get(sn.authorizationName).split(' ')[1]; // Extract the token from Bearer
+        //             if(!await tokenResponse(token, res, next)) {
+        //                 return;
+        //             }
+        //             else {
+        //                 break;
+        //             }
+        //         }
+        //     }
+        // }
+        // next();
+        try {
+            let token: string = action.request.headers['authorization']
+            if(token){
+                return true
+            }
+
+            return false
+
+        } catch(err) {
+            return false
+        }
+        //return true
         // try {
         //     let token: string = action.request.headers['authorization']
         //     if (token.startsWith('Bearer')) {

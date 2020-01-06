@@ -2,7 +2,7 @@ import path = require('path');
 
 export default {
     mongo: {
-        uri: process.env['MONGO_URI'] || 'mongodb://localhost:27017/',
+        uri: process.env['MONGO_URI'] || 'mongodb://127.0.0.1:27017/accounma',
     },
     auth:{
         uri: process.env['AUTH_URI'] || 'http://127.0.0.1:2000/authentiq/v1'
@@ -13,4 +13,20 @@ export default {
     clientPath: process.env['CLIENT_PATH'] || path.resolve(__dirname, '../../fum_cloud_shop/dist'),
     zarinpalMerchant: process.env['ZARINPAL_MERCHANT'],
     zarinpalSandbox: process.env['ZARINPAL_SANDBOX'] === 'TRUE',
+    AccountList: [{
+        method: "PUT",
+        url: "/account/profile"
+    }, {
+        method: "GET",
+        url: "/account/profile"
+    }, {
+        method: "GET",
+        url: "/account/wallet"
+    }, {
+        method: "POST",
+        url: "/account/pay"
+    }, {
+        method: "GET",
+        url: "/account/transaction"
+    }]
 }

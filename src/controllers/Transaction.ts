@@ -1,4 +1,4 @@
-import { JsonController, Get, Param, Post, Put, Authorized, Body, Res, OnUndefined, HttpError, HeaderParam } from "routing-controllers";
+import { JsonController, Get, Param, Post, Put, Authorized, Body, Res, OnUndefined, HttpError, HeaderParam, UnauthorizedError } from "routing-controllers";
 import Profile, { ProfileModel } from "../schemas/Profile";
 import { ErrorController } from "./ErrorController";
 import { validate } from "../services/authValidate";
@@ -9,10 +9,13 @@ const http = require("http");
 export class TransactionController {
     statusCode: any
     error: ErrorController
-
+    @Authorized()
     @Get('')
     @OnUndefined(this.error)
     async get(@HeaderParam("authorization") token: string, @Res() response:express.Response) {
+        if(!token){
+            throw new UnauthorizedError('need authorized')
+        }
         try {
             const responce = await validate(token)
             this.statusCode = responce['statusCode']
