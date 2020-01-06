@@ -6,6 +6,7 @@ import { register } from "../services/authRegister";
 import { request } from "http";
 import { ErrorController } from "./ErrorController";
 import { validate } from "../services/authValidate";
+import express = require('express');
 const http = require("http");
 @JsonController('/wallet')
 export class WalletController {
@@ -14,7 +15,7 @@ export class WalletController {
 
     @Get('')
     @OnUndefined(this.error)
-    async get(@HeaderParam("authorization") token: string) {
+    async get(@HeaderParam("authorization") token: string, @Res() response:express.Response) {
         try {
             const responce = await validate(token)
             this.statusCode = responce['statusCode']
@@ -25,6 +26,7 @@ export class WalletController {
                 };
                 try {
                    profile= await ProfileModel.findOne(query,{_id:1})
+                   response.status(this.statusCode)
                    return this.createPromise(WalletModel.findOne({'profile':profile['_id']},{'value':1,_id:0}), 500)
                 }
                 catch (error) {
@@ -34,6 +36,7 @@ export class WalletController {
             }
             else {
                 this.error = new ErrorController(this.statusCode, responce['message'])
+                response.status(this.statusCode)
                 return { message: responce['message'] }
             }
         } catch (error) {

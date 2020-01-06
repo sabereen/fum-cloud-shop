@@ -1,22 +1,27 @@
-import { JsonController, Get, Param, Post, Put, Authorized, Body, Res, OnUndefined, HttpError, HeaderParam } from "routing-controllers";
+import { JsonController, Get,  Post,  Body, Res, OnUndefined, HeaderParam, QueryParams } from "routing-controllers";
 import Profile, { ProfileModel } from "../schemas/Profile";
-import Wallet, { WalletModel } from "../schemas/Wallet";
-import config from "../config";
-import { register } from "../services/authRegister";
-import { request } from "http";
 import { ErrorController } from "./ErrorController";
-import { login } from "../services/authLogin";
 import { validate } from "../services/authValidate";
 import Transaction, { TransactionModel } from "../schemas/Transaction";
 import { pay, checkPayment } from "../services/payment";
+import express = require('express');
+import { Type } from "class-transformer";
+import { WalletModel } from "../schemas/Wallet";
 const http = require("http");
+class caQueryParams {
+    @Type(() => String)
+    authority : string;
+    @Type(() => String)
+    transactionID : string;
+    Status?:string
+}
 @JsonController('/pay')
 export class PayController {
     statusCode: any
     error: ErrorController
     @Post('')
     @OnUndefined(this.error)
-    async post(@Body() order: any, @HeaderParam("authorization") token: string) {
+    async post(@Body() order: any, @HeaderParam("authorization") token: string, @Res() response:express.Response) {
         //console.log(profile)
         let newTransaction: Transaction
         const {
@@ -36,19 +41,32 @@ export class PayController {
                 try {
                     const profile = await ProfileModel.findOne(query, { _id: 1 })
                     try {
-                        let result = await pay({ price: 100, callbackUrl: 'http://localhost' })
+                       
                         newTransaction.amount = 100
                         newTransaction.createdAt = new Date()
                         newTransaction.modifiedAt = new Date()
                         newTransaction.orderId = orderID
                         newTransaction.profile = profile['_id']
-                        newTransaction.statusCode = result.status
-                        newTransaction.refId = result.authority;
-                        (async () => {
-                            const id =await TransactionModel.create(newTransaction);
-                            console.log(id)
-                        })();
-                        return result.url
+                        const id =await TransactionModel.create(newTransaction);
+                        // console.log(id)
+                        try{
+                        let result = await pay({ price: 100, callbackUrl: 'http://localhost:6672/account/pay/callback?transactionID='+id['_id']})
+                        response.status(this.statusCode)
+                        try {
+                            await TransactionModel.updateOne({ _id: id }, {refId:result.authority}, (err, raw) => { return raw })
+                            response.status(this.statusCode)
+                            return response.redirect(result.url)
+                        }
+                        catch (error) {
+                            console.error('ERROR:');
+                            console.error(error);
+                        }
+                        }
+                        catch (error) {
+                            console.error('ERROR:');
+                            console.error(error);
+                        }
+                        
                     }
                     catch (error) {
                         console.error('ERROR:');
@@ -67,13 +85,22 @@ export class PayController {
     }
     @Get('/callback')
     @OnUndefined(this.error)
-    async get(@Param('authority') authority: string, @Param('transactionID') transactionID: number) {
+    async get(@QueryParams() param: caQueryParams, @Res() response:express.Response) {
         try {
+            // console.log(param)
             let price:number
-            const amount = await ProfileModel.findOne({ _id: transactionID }, { 'amount': 1, _id: 0 })
-            price = amount['amount']
-            checkPayment(authority,price)
-            return 
+            const transaction = await TransactionModel.findOne({ _id: param.transactionID },{_id:0})
+            // console.log(transaction) 
+            price = transaction['amount']
+            // console.log(param.Status)
+            if(param.Status && param.Status=='OK'){
+                
+                await WalletModel.update({profile:transaction.profile},{value:price},(err,raw)=>{return raw})
+            }
+           
+            response.status(200)
+            this.createPromise(checkPayment(param.authority,price),500)
+            return ''
 
 
         } catch (error) {

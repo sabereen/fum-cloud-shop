@@ -36,10 +36,11 @@ export async function checkPayment(authority: string, price: number) {
         Amount: price, // In Tomans
         Authority: authority,
     })
-
+    console.log(result)
     if (result.status == 100 || result.status == 101) {
         return result
     } else {
-        throw new Error('پرداخت انجام نشده است')
+        return {message:'no pay',status:result.status}
+        //throw new Error('پرداخت انجام نشده است')
     }
 }

@@ -7,6 +7,7 @@ import { request } from "http";
 import { ErrorController } from "./ErrorController";
 import { login } from "../services/authLogin";
 import { validate } from "../services/authValidate";
+import express = require('express');
 const http = require("http");
 @JsonController('/profile')
 export class ProfileController {
@@ -14,7 +15,7 @@ export class ProfileController {
     error: ErrorController
     @Post('')
     @OnUndefined(this.error)
-    async post(@Body() profile: any) {
+    async post(@Body() profile: any,@Res() response:express.Response) {
         //console.log(profile)
         let newProfile: Profile
         let newWallet: Wallet
@@ -54,6 +55,7 @@ export class ProfileController {
                 try {
                     //const Token = await login(data)
                     //return Token
+                    response.status(this.statusCode)
                     return {token:responce['token']}
                 } catch (error) {
                     console.error('ERROR:');
@@ -62,6 +64,7 @@ export class ProfileController {
             }
             else {
                 this.error = new ErrorController(this.statusCode, responce['message'])
+                response.status(this.statusCode)
                 return { message: responce['message'] }
             }
         } catch (error) {
@@ -71,7 +74,7 @@ export class ProfileController {
     }
     @Get('')
     @OnUndefined(this.error)
-    async get(@HeaderParam("authorization") token: string) {
+    async get(@HeaderParam("authorization") token: string, @Res() response:express.Response) {
         try {
             //console.log(token)
             const responce = await validate(token)
@@ -82,10 +85,12 @@ export class ProfileController {
                 const query = {
                     email: JSON.parse(responce['body']).email
                 };
+                response.status(this.statusCode)
                 return this.createPromise(ProfileModel.findOne(query), 500)
             }
             else {
                 this.error = new ErrorController(this.statusCode, responce['message'])
+                response.status(this.statusCode)
                 return { message: responce['message'] }
             }
         } catch (error) {
@@ -95,7 +100,7 @@ export class ProfileController {
     }
     @Put('')
     @OnUndefined(this.error)
-    async put(@Body() upProfile: any, @HeaderParam("authorization") token: string) {
+    async put(@Body() upProfile: any, @HeaderParam("authorization") token: string, @Res() response:express.Response) {
         //console.log(token)
         try {
 
@@ -124,6 +129,7 @@ export class ProfileController {
                 }
                 try {
                     await ProfileModel.updateOne({ email: userUpdate.email }, userUpdate, (err, raw) => { return userUpdate })
+                    response.status(this.statusCode)
                     return upProfile
                 }
                 catch (error) {
@@ -134,6 +140,7 @@ export class ProfileController {
             }
             else {
                 this.error = new ErrorController(this.statusCode, responce['message'])
+                response.status(this.statusCode)
                 return { message: responce['message'] }
             }
         } catch (error) {
