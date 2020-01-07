@@ -7,7 +7,7 @@ API Reference is provided in the [wiki](https://github.com/sabereen/fum-cloud-sh
 
 <br/>
 
-## project structur
+## project structure
 In src folder you can see structure of project and change some of that you need for your purpose. the description of project are following:
 * project includes controllers, schemas, services, config.ts and index ts.
 * config.ts includes environments that defined to use in other files as need.
