@@ -5,4 +5,4 @@ RUN npm install && npm install tsc -g
 RUN npm run-script build
 COPY . .
 EXPOSE 6672
-CMD ["node", "index.js"]
+CMD ["node", "dist/index.js"]
