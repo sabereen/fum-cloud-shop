@@ -2,10 +2,10 @@ import path = require('path');
 
 export default {
     mongo: {
-        uri: process.env['MONGO_URI'] || 'mongodb://127.0.0.1:27017/accounma',
+        uri: process.env['MONGO_URI'] || 'mongodb://db:27017',
     },
     auth:{
-        uri: process.env['AUTH_URI'] || 'http://127.0.0.1:2000/authentiq/v1'
+        uri: process.env['AUTH_URI'] || 'http://auth:2000/authentiq/v1'
     },
     port: process.env['PORT'] || 6672,
     apiRoot: process.env['API_ROOT'] || 'http://127.0.0.1:6672/account',

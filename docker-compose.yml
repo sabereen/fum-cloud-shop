@@ -1,49 +1,3 @@
-# version: '2.1'
-
-# services:
-#   # fum-cloud-shop:
-#   #   image: fum-cloud-shop
-#   #   build: .
-#   #   environment:
-#   #     NODE_ENV: production
-#   #   ports:
-#   #     - 6672:6672
-
-#   fum-cloud-shop-dev:
-#     image: node:13-alpine
-#     container_name: nodejs
-#     working_dir: /home/app
-#     command: npm run start-dev
-#     environment:
-#       MONGO_URI: mongodb://root:cloud@mongo/fum_cloud_shop?authSource=admin
-#     volumes:
-#       - .:/home/app
-#     ports:
-#       - 6672:6672
-
-#   mongo:
-#     image: mongo:4.2.2-bionic
-#     container_name: mongo
-#     restart: always
-#     # ports:
-#     #     - 27017:27017
-#     volumes:
-#       - mongo:/data/db
-#     environment:
-#       MONGO_INITDB_ROOT_USERNAME: root
-#       MONGO_INITDB_ROOT_PASSWORD: cloud
-
-#   auth:
-#     image: sayid/auth
-#     container_name: auth
-#     # ports:
-#     #   - 2000:2000
-#     environment:
-#       DB: mongodb://root:cloud@mongo/auth?authSource=admin
-
-# volumes:
-#   mongo:
-#     driver: local
 version: "2.0"
 
 services:
@@ -58,41 +12,11 @@ services:
       maivn:
         aliases:
           - accountma
-    # depends_on:
-    #    - mongo
-    #   - auth
-    # links:
-    #    - mongo
-    #   - auth
+
     depends_on:
       - db
     restart: unless-stopped
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost/auth/v1/heartbeat"]
-    #   interval: 20s
-    #   timeout: 10s
-    #   retries: 3
-    #   start_period: 1m
-  db:
-    image: mvertes/alpine-mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: accountma
-      MONGO_INITDB_ROOT_PASSWORD: accountmanager
-    logging:
-      driver: 'none'
-    restart: unless-stopped
-    # healthcheck:
-    #   test: "echo 'db.stats().ok' | mongo localhost:27017/accountma --quiet"
-    #   interval: 5s
-    #   timeout: 10s
-    #   retries: 10
-    #   start_period: 15s
-    volumes:
-      - db-data:/data/db
-    networks: 
-      maivn:
-        aliases:
-          - db
+
   auth:
     image: sayid/authentiq
     ports:
@@ -102,16 +26,22 @@ services:
         aliases:
           - auth
 
-  # mongo:
-  #   image: mongo
-  #   volumes:
-  #     - ./data:/data/db
-  #   ports:
-  #     - "27017:27017"
-  #   networks:
-  #     maivn:
-  #       aliases:
-  #         - db
+  db:
+    image: mvertes/alpine-mongo
+    logging:
+      driver: 'none'
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: accountma
+      MONGO_INITDB_ROOT_PASSWORD: accountmanager
+    ports:
+      - "27017:27017"
+    volumes:
+      - db-data:/data/db
+    networks:
+      maivn:
+        aliases:
+          - db
 
 networks:
   maivn: 
