@@ -28,8 +28,7 @@ In order to run this as a service and probably develop on top of it, you'll need
 * To run it for production you may run `npm build` and after that run `node index.js`
 
 <table>
-    
-    <td>Running <code>npm start</code> will only watch your application and save changes in dist folder;
+    <td>Running <code>npm start</code> will only watch your application and save changes in dist folder;</td>
 </table>
 
 ## Setting up As a Microservice
