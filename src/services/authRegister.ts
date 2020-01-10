@@ -3,7 +3,7 @@ import config from "../config";
 const request = require('request');
 export async function register(data) {
 
-    console.log(data)
+    //console.log(data)
     return new Promise((resolve, reject) => {
         request({
             method: 'post',
