@@ -23,7 +23,7 @@ In order to run this as a service and probably develop on top of it, you'll need
 * Install https://nodejs.org/en/[node.js] and https://www.mongodb.com/[mongoDB]
 * Clone the repository and `cd` to the cloned repository
 * Set environment variable `mongo` to the full URI of your mongo database or modify the `uri` parameter in `config.ts` (first one overrides the second)
-* Set environment variable `auth` to the full URI of your mongo database or modify the `uri` parameter in `config.ts` (first one overrides the second)
+* Set environment variable `auth` to the full URI of your SayidHosseini/authentiq service or modify the `uri` parameter in `config.ts` (first one overrides the second)
 * To install dependency packages, run `npm install`
 * To run the application for development purposes, run `npm start` 
 * To run it for production you may run `npm build` and after that run `node index.js`
@@ -36,7 +36,7 @@ In order to run this as a service and probably develop on top of it, you'll need
 If you want to run the module as a containerize microservice, you'll need to install [Docker](https://www.docker.com).
 
 * In order to use this as a microservice in your project, you'll need a MongoDB container with the name `mongo`. This is the name that should be resolved to the IP address of the mongoDB container. If you'd like to change that, you'll need to modify the `uri` parameter in `config.ts`, accordingly. 
-* In order to use this as a microservice in your project, you'll need a MongoDB container with the name `auth`. This is the name that should be resolved to the IP address of the mongoDB container. If you'd like to change that, you'll need to modify the `uri` parameter in `config.ts`, accordingly.
+* In order to use this as a microservice in your project, you'll need a Sayid/authentiq service container with the name `auth`. This is the name that should be resolved to the IP address of the Sayid/authentiq container. If you'd like to change that, you'll need to modify the `uri` parameter in `config.ts`, accordingly.
 * We provide a `docker-compose.yml` file that includes everything needed to launch the system. You may use either of `docker-compose` or `docker swarm` to setup the system for production easily! 
 * Although the Dockerfile has been provided, **you do not need to make your own copy of the image**, if you do not need to modify the source. The latest version for *Linux/amd64* is always built [automatically](https://docs.docker.com/docker-hub/builds/) and pushed to the [DockerHub repository](https://hub.docker.com/r/fumcloudshop/accountma). It is addressable with the `latest` tag `fumcloudshop/accountma`. Since there might be other versions in the future and latest would point to those new versions, we recommend that you use version explicit tags  to keep consistency.
 * If you want to make your own copy of the image, clone it on the target platform and `cd` to the cloned repository. Then run `docker build -t $DOCKER_ACC/$DOCKER_REPO:$IMG_TAG .` to build the image locally. Then, you may push it to [DockerHub](https://docs.docker.com/docker-hub/repos/) after building is complete.
