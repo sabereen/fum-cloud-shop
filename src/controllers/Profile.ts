@@ -5,7 +5,7 @@ import config from "../config";
 import { register } from "../services/authRegister";
 import { request } from "http";
 import { ErrorController } from "./ErrorController";
-import { login } from "../services/authLogin";
+// import { login } from "../services/authLogin";
 import { validate } from "../services/authValidate";
 import express = require('express');
 const http = require("http");

@@ -6,7 +6,7 @@ import { HeartBeatController } from './controllers/HeartBeat'
 import './services/database'
 import { ProfileController } from './controllers/Profile';
 import { WalletController } from './controllers/Wallet';
-import { PayController } from './controllers/pay';
+import { PayController } from './controllers/Pay';
 import { TransactionController } from './controllers/Transaction';
 import log = require('morgan');
 // disable classToPlain class-transformer

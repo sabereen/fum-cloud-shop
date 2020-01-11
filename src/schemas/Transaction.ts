@@ -2,7 +2,7 @@ import { Typegoose, prop, Ref } from "typegoose";
 import Profile from "./Profile";
 import * as mongoose from 'mongoose';
 import config from "../config";
-mongoose.connect(config.mongo.uri+'transaction');
+
 export class Transaction extends Typegoose {
     @prop()
     type: string

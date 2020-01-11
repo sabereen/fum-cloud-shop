@@ -6,28 +6,30 @@ services:
     build: .
     environment:
       NODE_ENV: production
+      MONGO_URI: mongodb://accountma:accountmanager@mongo:27017/shop
     ports:
       - 6672:6672
-    networks:
-      maivn:
-        aliases:
-          - accountma
-
     depends_on:
-      - db
+      - mongo
+    # networks:
+    #   maivn:
+    #     aliases:
+    #       - accountma
     restart: unless-stopped
 
   auth:
     image: sayid/authentiq
     ports:
       - 2000:2000
-    networks:
-      maivn:
-        aliases:
-          - auth
+    depends_on:
+      - mongo
+    # networks:
+    #   maivn:
+    #     aliases:
+    #       - auth
 
-  db:
-    image: mvertes/alpine-mongo
+  mongo:
+    image: mongo:4.2.2-bionic
     logging:
       driver: 'none'
     restart: unless-stopped
@@ -38,12 +40,19 @@ services:
       - "27017:27017"
     volumes:
       - db-data:/data/db
-    networks:
-      maivn:
-        aliases:
-          - db
 
-networks:
-  maivn: 
+
+  db:
+    image: mvertes/alpine-mongo
+    logging:
+      driver: 'none'
+    restart: unless-stopped
+    volumes:
+      - db-data-auth:/data/db
+
+# networks:
+#   maivn: 
+
 volumes:
   db-data:
+  db-data-auth:

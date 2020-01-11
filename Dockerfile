@@ -1,8 +1,6 @@
 FROM node:alpine
 WORKDIR /usr/src/accountman
-COPY package.json .
-RUN npm install && npm install tsc -g
-RUN npm run-script build
 COPY . .
+RUN npm install && npm run build
 EXPOSE 6672
-CMD ["node", "dist/index.js"]
+CMD ["node", "."]
