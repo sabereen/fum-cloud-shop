@@ -19,9 +19,6 @@ export class ProfileController {
         //console.log(profile)
         let newProfile: Profile
         let newWallet: Wallet
-        if(!profile.email && !profile.password){
-             throw new BadRequestError('need email and password')
-        }
         if(!profile.email || !profile.password){
              throw new BadRequestError('need email and password')
         }
@@ -51,12 +48,12 @@ export class ProfileController {
                 newProfile.nationalCode = nationalCode
                 newProfile.address = address
                 newProfile.postalCode = postalCode;
-                (async () => {
+                // (async () => {
                     const id = await ProfileModel.create(newProfile);
                     newWallet.profile = id._id
                     newWallet.value = 0
                     await WalletModel.create(newWallet);
-                })();
+                // })();
                 
                 try {
                     //const Token = await login(data)

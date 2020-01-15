@@ -27,7 +27,7 @@ export class TransactionController {
                 try {
                    profile= await ProfileModel.findOne(query,{_id:1})
                    response.status(this.statusCode)
-                   return this.createPromise(TransactionModel.find({'profile':profile['_id']}), 500)
+                   return this.createPromise(TransactionModel.find({}), 500)
                 }
                 catch (error) {
                     console.error('ERROR:');

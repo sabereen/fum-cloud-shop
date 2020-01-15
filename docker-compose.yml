@@ -6,7 +6,7 @@ services:
     build: .
     environment:
       NODE_ENV: production
-      MONGO_URI: mongodb://accountma:accountmanager@mongo:27017/shop
+      MONGO_URI: mongodb://db:27017/shop
     ports:
       - 6672:6672
     depends_on:
@@ -19,8 +19,8 @@ services:
 
   auth:
     image: sayid/authentiq
-    ports:
-      - 2000:2000
+    # ports:
+    #   - 2000:2000
     depends_on:
       - mongo
     # networks:
@@ -33,9 +33,9 @@ services:
     logging:
       driver: 'none'
     restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: accountma
-      MONGO_INITDB_ROOT_PASSWORD: accountmanager
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: accountma
+    #   MONGO_INITDB_ROOT_PASSWORD: accountmanager
     ports:
       - "27017:27017"
     volumes:

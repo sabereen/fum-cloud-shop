@@ -59,6 +59,7 @@ export class PayController {
                         try {
                             await TransactionModel.updateOne({ _id: id }, {refId:result.authority}, (err, raw) => { return raw })
                             response.status(this.statusCode)
+                            return result
                             return response.redirect(result.url)
                         }
                         catch (error) {
