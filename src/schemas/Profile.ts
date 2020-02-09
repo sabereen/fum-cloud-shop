@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import config from "../config";
 
 export class Profile extends Typegoose {
-    @prop()
+    @prop({required:true,index:true,lowercase:true})
     email: string
 
     @prop()

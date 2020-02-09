@@ -1,34 +1,40 @@
-version: "2.0"
+version: "3.4"
 
 services:
-  accountma:
+  accountico:
     image: fumcloudshop/accountma:latest
     build: .
     environment:
       NODE_ENV: production
-      MONGO_URI: mongodb://db:27017/shop
+      MONGO_URI: mongodb://accountico-db:27017/shop
     ports:
       - 6672:6672
     depends_on:
-      - mongo
+      - accountico-db
     # networks:
     #   maivn:
     #     aliases:
     #       - accountma
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6672/accountico/v1/account/heartbeat"]
+      interval: 1m
+      timeout: 10s
+      retries: 5
+      start_period: 1m
     restart: unless-stopped
 
-  auth:
+  authentiq:
     image: sayid/authentiq
     # ports:
     #   - 2000:2000
     depends_on:
-      - mongo
+      - authentiq-db
     # networks:
     #   maivn:
     #     aliases:
     #       - auth
 
-  mongo:
+  authentiq-db:
     image: mongo:4.2.2-bionic
     logging:
       driver: 'none'
@@ -42,7 +48,7 @@ services:
       - db-data:/data/db
 
 
-  db:
+  accountico-db:
     image: mvertes/alpine-mongo
     logging:
       driver: 'none'

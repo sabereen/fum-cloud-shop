@@ -7,13 +7,13 @@ export class Transaction extends Typegoose {
     @prop()
     type: string
 
-    @prop()
+    @prop({required:true})
     createdAt: Date
 
     @prop()
     modifiedAt: Date
 
-    @prop()
+    @prop({required:true})
     amount: number
 
     @prop()
@@ -25,7 +25,7 @@ export class Transaction extends Typegoose {
     @prop()
     orderId: number
 
-    @prop({ ref: Profile })
+    @prop({ ref: Profile,required:true })
     profile: Ref<Profile>
 }
 

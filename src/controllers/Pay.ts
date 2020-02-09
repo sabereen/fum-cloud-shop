@@ -54,12 +54,12 @@ export class PayController {
                         const id =await TransactionModel.create(newTransaction);
                         // console.log(id)
                         try{
-                        let result = await pay({ price: 100, callbackUrl: 'http://localhost:6672/account/pay/callback?transactionID='+id['_id']})
+                        let result = await pay({ price: 100, callbackUrl: 'http://accountico:6672/accountico/v1/pay/callback?transactionID='+id['_id']})
                         response.status(this.statusCode)
                         try {
                             await TransactionModel.updateOne({ _id: id }, {refId:result.authority}, (err, raw) => { return raw })
                             response.status(this.statusCode)
-                            return result
+                           // return result
                             return response.redirect(result.url)
                         }
                         catch (error) {

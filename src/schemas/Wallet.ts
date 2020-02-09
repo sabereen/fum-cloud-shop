@@ -4,10 +4,10 @@ import * as mongoose from 'mongoose';
 import config from "../config";
 
 export class Wallet extends Typegoose {
-    @prop()
+    @prop({required:true})
     value: number
 
-    @prop({ ref: Profile })
+    @prop({ ref: Profile,required:true })
     profile: Ref<Profile>
 }
 
