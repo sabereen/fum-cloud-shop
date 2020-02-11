@@ -7,6 +7,7 @@ services:
     environment:
       NODE_ENV: production
       MONGO_URI: mongodb://accountico-db:27017/shop
+      CALLBACK_URI: http://accountico:6672/accountico/v1/pay/callback
     ports:
       - 6672:6672
     depends_on:

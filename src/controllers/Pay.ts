@@ -7,6 +7,7 @@ import { pay, checkPayment } from "../services/payment";
 import express = require('express');
 import { Type } from "class-transformer";
 import { WalletModel } from "../schemas/Wallet";
+import config from "../config";
 const http = require("http");
 class caQueryParams {
     @Type(() => String)
@@ -54,7 +55,7 @@ export class PayController {
                         const id =await TransactionModel.create(newTransaction);
                         // console.log(id)
                         try{
-                        let result = await pay({ price: 100, callbackUrl: 'http://accountico:6672/accountico/v1/pay/callback?transactionID='+id['_id']})
+                        let result = await pay({ price: 100, callbackUrl: config.callback.uri+'?transactionID='+id['_id']})
                         response.status(this.statusCode)
                         try {
                             await TransactionModel.updateOne({ _id: id }, {refId:result.authority}, (err, raw) => { return raw })
