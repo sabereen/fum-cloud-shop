@@ -55,11 +55,11 @@ const appOptions: RoutingControllersOptions = {
 const account: express.Application = createExpressServer(appOptions)
 const app = express()
 app.use(log('combined'));
-app.use('/accountico/v1/account', (req, res, next) => {
+app.use('/accountico/v1', (req, res, next) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
     next()
 })
-app.use('/accountico/v1/account', account)
+app.use('/accountico/v1', account)
 
 // app.use(express.static(config.clientPath))
 
