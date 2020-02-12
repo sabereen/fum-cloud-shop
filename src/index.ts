@@ -61,7 +61,7 @@ app.use('/accountico/v1/account', (req, res, next) => {
 })
 app.use('/accountico/v1/account', account)
 
-app.use(express.static(config.clientPath))
+// app.use(express.static(config.clientPath))
 
 app.use((req, res, next) => {
     res.status(404)

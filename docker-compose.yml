@@ -12,10 +12,6 @@ services:
       - 6672:6672
     depends_on:
       - accountico-db
-    # networks:
-    #   maivn:
-    #     aliases:
-    #       - accountma
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:6672/accountico/v1/account/heartbeat"]
       interval: 1m
@@ -26,25 +22,27 @@ services:
 
   authentiq:
     image: sayid/authentiq
+    environment:
+      AUTHENTIQ_DB_HOST: authentiq-db
+      AUTHENTIQ_DB_PORT: 27017
+      AUTHENTIQ_DB_NAME: authentiq
+      AUTHENTIQ_DB_USERNAME: ''
+      AUTHENTIQ_DB_PASSWORD: ''
     # ports:
     #   - 2000:2000
     depends_on:
       - authentiq-db
-    # networks:
-    #   maivn:
-    #     aliases:
-    #       - auth
 
   authentiq-db:
-    image: mongo:4.2.2-bionic
+    image: mvertes/alpine-mongo
     logging:
       driver: 'none'
     restart: unless-stopped
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: accountma
-    #   MONGO_INITDB_ROOT_PASSWORD: accountmanager
-    ports:
-      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ''
+      MONGO_INITDB_ROOT_PASSWORD: ''
+    # ports:
+    #   - "27017:27017"
     volumes:
       - db-data:/data/db
 
@@ -56,9 +54,6 @@ services:
     restart: unless-stopped
     volumes:
       - db-data-auth:/data/db
-
-# networks:
-#   maivn: 
 
 volumes:
   db-data:

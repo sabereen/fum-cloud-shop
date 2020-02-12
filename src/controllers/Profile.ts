@@ -15,12 +15,12 @@ export class ProfileController {
     error: ErrorController
     @Post('')
     @OnUndefined(this.error)
-    async post(@Body() profile: any,@Res() response:express.Response) {
+    async post(@Body() profile: any, @Res() response: express.Response) {
         //console.log(profile)
         let newProfile: Profile
         let newWallet: Wallet
-        if(!profile.email || !profile.password){
-             throw new BadRequestError('need email and password')
+        if (!profile.email || !profile.password) {
+            throw new BadRequestError('need email and password')
         }
         const {
             email,
@@ -49,17 +49,17 @@ export class ProfileController {
                 newProfile.address = address
                 newProfile.postalCode = postalCode;
                 // (async () => {
-                    const id = await ProfileModel.create(newProfile);
-                    newWallet.profile = id._id
-                    newWallet.value = 0
-                    await WalletModel.create(newWallet);
+                const id = await ProfileModel.create(newProfile);
+                newWallet.profile = id._id
+                newWallet.value = 0
+                await WalletModel.create(newWallet);
                 // })();
-                
+
                 try {
                     //const Token = await login(data)
                     //return Token
                     response.status(this.statusCode)
-                    return {token:responce['token']}
+                    return { token: responce['token'] }
                 } catch (error) {
                     console.error('ERROR:');
                     console.error(error);
@@ -78,10 +78,10 @@ export class ProfileController {
     @Authorized()
     @Get('')
     @OnUndefined(this.error)
-    async get(@HeaderParam("authorization") token: string, @Res() response:express.Response) {
+    async get(@HeaderParam("authorization") token: string, @Res() response: express.Response) {
         try {
             //console.log(token)
-            if(!token){
+            if (!token) {
                 throw new UnauthorizedError('need authorized')
             }
             const responce = await validate(token)
@@ -108,9 +108,9 @@ export class ProfileController {
     @Authorized()
     @Put('')
     @OnUndefined(this.error)
-    async put(@Body({required:true}) upProfile: any, @HeaderParam("authorization") token: string, @Res() response:express.Response) {
+    async put(@Body({ required: true }) upProfile: any, @HeaderParam("authorization") token: string, @Res() response: express.Response) {
         //console.log(token)
-        if(!token){
+        if (!token) {
             throw new UnauthorizedError('need authorized')
         }
         try {
